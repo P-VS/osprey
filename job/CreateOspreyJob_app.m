@@ -93,7 +93,6 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
         RunJobButton                    matlab.ui.control.Button
         LoadJobFileButton               matlab.ui.control.Button
         LoadMRSContButton               matlab.ui.control.Button
-        Image                           matlab.ui.control.Image
         TextArea                        matlab.ui.control.TextArea
     end
 
@@ -1160,11 +1159,6 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             app.LoadMRSContButton.Position = [12 11 167 38];
             app.LoadMRSContButton.Text = 'Load MRSCont';
 
-            % Create Image
-            app.Image = uiimage(app.InteractiveOspreyJobmCreatorUIFigure);
-            app.Image.Position = [656 602 59 47];
-            app.Image.ImageSource = 'osprey.gif';
-
             % Create TextArea
             app.TextArea = uitextarea(app.InteractiveOspreyJobmCreatorUIFigure);
             app.TextArea.Editable = 'off';
@@ -1172,7 +1166,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             app.TextArea.FontSize = 28;
             app.TextArea.FontWeight = 'bold';
             app.TextArea.FontColor = [0.0392 0.2784 0.4392];
-            app.TextArea.Position = [367 600 287 49];
+            app.TextArea.Position = [367 600 348 49];
             app.TextArea.Value = {'Osprey'};
 
             % Show the figure after all components are created
