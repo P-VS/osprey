@@ -162,7 +162,7 @@ for kk = 1:MRSCont.nDatasets
             end
             
             % GM
-            vol_GMMask.fname    = fullfile(saveDestination, [saveName '_GM' maskExt]);
+            vol_GMMask.fname    = fullfile(saveDestination, [saveName VoxelNum '_GM' maskExt]);
             vol_GMMask.descrip  = ['GMmasked_MRS_Voxel_Mask_' VoxelNum];
             vol_GMMask.dim      = vol_mask.dim;
             vol_GMMask.dt       = vol_mask.dt;
@@ -171,7 +171,7 @@ for kk = 1:MRSCont.nDatasets
             vol_GMMask          = spm_write_vol(vol_GMMask, GM_voxmask_vol);
 
             % WM
-            vol_WMMask.fname    = fullfile(saveDestination, [saveName '_WM' maskExt]);
+            vol_WMMask.fname    = fullfile(saveDestination, [saveName VoxelNum '_WM' maskExt]);
             vol_WMMask.descrip  = ['WMmasked_MRS_Voxel_Mask_' VoxelNum];
             vol_WMMask.dim      = vol_mask.dim;
             vol_WMMask.dt       = vol_mask.dt;
@@ -180,7 +180,7 @@ for kk = 1:MRSCont.nDatasets
             vol_WMMask          = spm_write_vol(vol_WMMask, WM_voxmask_vol);
 
             % CSF
-            vol_CSFMask.fname   = fullfile(saveDestination, [saveName '_CSF' maskExt]);
+            vol_CSFMask.fname   = fullfile(saveDestination, [saveName VoxelNum '_CSF' maskExt]);
             vol_CSFMask.descrip = ['CSFmasked_MRS_Voxel_Mask_' VoxelNum];
             vol_CSFMask.dim     = vol_mask.dim;
             vol_CSFMask.dt      = vol_mask.dt;
@@ -201,9 +201,9 @@ for kk = 1:MRSCont.nDatasets
             fCSF = CSFsum / (GMsum + WMsum + CSFsum);
 
             % Save normalized fractional tissue volumes to MRSCont
-            MRSCont.seg.tissue.fGM(kk)  = fGM;
-            MRSCont.seg.tissue.fWM(kk)  = fWM;
-            MRSCont.seg.tissue.fCSF(kk) = fCSF;
+            MRSCont.seg.tissue.fGM(kk,rr)  = fGM;
+            MRSCont.seg.tissue.fWM(kk,rr)  = fWM;
+            MRSCont.seg.tissue.fCSF(kk,rr) = fCSF;
         end
     end 
 end
