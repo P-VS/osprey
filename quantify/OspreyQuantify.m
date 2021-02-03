@@ -652,7 +652,7 @@ concW_CSF   = 53.84*1e3;
 cWM = 1; % concentration of GABA in pure WM
 cGM = 2; % concentration of GABA in pure GM
 alpha = cWM/cGM;
-CorrFactor = (meanfGM + alpha.*meanfWM) ./ ((fGM + alpha.*fWM) * (meanfGM + meanfWM));
+CorrFactor = (meanfGM + alpha.*meanfWM) ./ ((fGM + alpha.*fWM) .* (meanfGM + meanfWM));
 
 % GABA (Harris et al, J Magn Reson Imaging 42:1431-1440 (2015))
 idx_GABA  = find(strcmp(metsName.(getResults{1}),'GABA'));
