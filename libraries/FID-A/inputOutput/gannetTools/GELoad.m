@@ -316,12 +316,6 @@ start_recv = hdr_value(rdb_hdr_dab_start_rcv);
 stop_recv = hdr_value(rdb_hdr_dab_stop_rcv);
 nreceivers = (stop_recv - start_recv) + 1;
 
-pfile = dir(fname);
-pfilesize = 2*point_size*nechoes*nreceivers*(nframes+1)*npoints+pfile_header_size;
-if pfile.bytes ~=pfilesize
-    nreceivers = (pfile.bytes-pfile_header_size)/(2*point_size*nechoes*(nframes+1)*npoints); 
-end
-
 % RTN 2018
 dataframes = f_hdr_value(rdb_hdr_user4)/nex;
 refframes = f_hdr_value(rdb_hdr_user19);
@@ -341,7 +335,12 @@ end
 % Compute size (in bytes) of data
 data_elements = npoints * 2;
 totalframes = nrows * nechoes; % RTN nechoes mulitply
-data_elements = data_elements * totalframes * nreceivers;
+if rdbm_rev_num > 27.0
+    pfile = dir(fname);
+    data_elements = pfile.bytes-pfile_header_size;
+else
+    data_elements = data_elements * totalframes * nreceivers;
+end
 
 fseek(fid, pfile_header_size, 'bof');
 % Read data: point_size = 2 means 16-bit data, point_size = 4 means EDR
@@ -363,22 +362,82 @@ fclose(fid);
 %              over phase cycles
 
 if (nechoes == 1) 
+    if rdbm_rev_num>26
+        newdat=reshape(raw_data,[2,numel(raw_data)/2]);
+        totalframes = totalframes-1;
+        
+        con  =1;
+        tdat =[];
+        sav  = 0;
+        nextp=1;
+        
+        while con
+            start=find(newdat(1,nextp:end)~=0); 
     
-    ShapeData = reshape(raw_data, [2 npoints totalframes nreceivers]);
+            if sav==0
+                if numel(tdat)>0
+                    nc=nc+1;
+                    tmpdat = newdat(:,nextp+start(1)-1:nextp+start(1)-1+totalframes*npoints-1);
+                    todat=tdat;
+                    tdat = zeros(2,totalframes*npoints,nc);
+                    tdat(:,:,1:nc-1)=todat;
+                    tdat(:,:,nc)=tmpdat;
+                else
+                    tdat = newdat(:,start(1):start(1)+totalframes*npoints-1);
+                    tdat=reshape(tdat,[2,totalframes*npoints,1]);
+                    nc=1;
+                end
+                nextp = nextp+start(1)+totalframes*npoints;
+            else  
+                tn=1;
+                nextp=nextp+start(1);
+                while tn
+                    tmpdat = newdat(1,nextp:nextp+100);
+        
+                    if sum(abs(tmpdat))==0
+                        tn=0;
+                    end
+                    nextp=nextp+1;
+                end
+            end
     
-    if (dataframes + refframes) ~= nframes
-        mult = 1;
-        dataframes = dataframes * nex;
-        refframes = nframes - dataframes;
-    else
+            sav = mod(sav+1,4);
+
+            if (nextp+totalframes*npoints)>numel(raw_data)/2
+                con=0;
+            end
+        end
+        
+        ndim = size(tdat);
+        nreceivers = ndim(3); 
+        
+        ShapeData = reshape(tdat, [2 npoints totalframes nreceivers]);
+        
         mult = 1/nex;
+ 
+        WaterData = ShapeData(:,:,1:refframes,:) * mult;
+        FullData = ShapeData(:,:,refframes+1:end,:) * mult;
+    
+        totalframes = totalframes - (refframes);
+        waterframes = refframes;
+    else
+        ShapeData = reshape(raw_data, [2 npoints totalframes nreceivers]);
+        
+        if (dataframes + refframes) ~= nframes
+            mult = 1;
+            dataframes = dataframes * nex;
+            refframes = nframes - dataframes;
+        else
+            mult = 1/nex;
+        end
+        
+        WaterData = ShapeData(:,:,2:refframes+1,:) * mult;
+        FullData = ShapeData(:,:,refframes+2:end,:) * mult;
+    
+        totalframes = totalframes - (refframes+1);
+        waterframes = refframes;
     end
-    
-    WaterData = ShapeData(:,:,2:refframes+1,:) * mult;
-    FullData = ShapeData(:,:,refframes+2:end,:) * mult;
-    
-    totalframes = totalframes - (refframes+1);
-    waterframes = refframes;
+
     
 else
     
