@@ -113,7 +113,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
                     app.DenoisingDropDown.Enable = 'On';
                     app.DenoisingDropDown.Value = 'none';
                 case 'MEGA'
-                    app.EditingTargetsDropDown.Items = {'GABA','GSH'};
+                    app.EditingTargetsDropDown.Items = {'GABA','GSH','Lac'};
                     app.EditingTargetsDropDown.Value = 'GABA';
                     
                     app.FittingStyleDropDown.Enable = 'On';
@@ -146,7 +146,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
 
         % Button pushed function: MRSDataButton
         function MRSDataButtonPushed(app, event)
-            info = 'Please select the MRS file to read';
+            info = 'Please select the metabolite spectra to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
             
@@ -181,6 +181,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             app.MetaboliteNulledDropDown.Enable = 'On';
             app.T1DataniftiniiButton.Enable = 'On';
             app.T1DataniftiniiDropDown.Enable = 'On';
+            movegui(app.InteractiveOspreyJobmCreatorUIFigure,'onscreen')
         end
 
         % Button pushed function: H2OReferenceButton
@@ -188,8 +189,16 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             info = 'Please select the water reference file to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
+            dir = app.MRSDataText.Value{1};
+            [path,~,~]=fileparts(dir);
             
-            h2oreffiles = uipickfiles('FilterSpec',[pwd], ...
+            SepFileList =  split(path, filesep);
+            npath = [];
+            for s = 1 : length(SepFileList)-1
+                npath = [npath SepFileList{s} filesep];
+            end
+            
+            h2oreffiles = uipickfiles('FilterSpec',npath, ...
                                 'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
                                 'NumFiles',ndata,'Prompt',info);
             
@@ -199,7 +208,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             
             app.H2OReferenceDropDown.Items = h2oreffiles;
             app.H2OReferenceDropDown.Value = h2oreffiles{1};
-            
+            movegui(app.InteractiveOspreyJobmCreatorUIFigure,'onscreen')
         end
 
         % Button pushed function: H2OShortTEButton
@@ -208,8 +217,15 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             [fname,pathname]=uigetfile('*.*',info);
             
             ndata = app.NumberofdatasetsEditField.Value;
+            dir = app.MRSDataText.Value{1};
+            [path,~,~]=fileparts(dir);
+            SepFileList =  split(path, filesep);
+            npath = [];
+            for s = 1 : length(SepFileList)-1
+                npath = [npath SepFileList{s} filesep];
+            end
             
-            h2ostefiles = uipickfiles('FilterSpec',[pwd], ...
+            h2ostefiles = uipickfiles('FilterSpec',npath, ...
                                 'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
                                 'NumFiles',ndata,'Prompt',info);
             
@@ -219,6 +235,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             
             app.H2OShortTEDropDown.Items = h2ostefiles;
             app.H2OShortTEDropDown.Value = h2ostefiles{1};
+            movegui(app.InteractiveOspreyJobmCreatorUIFigure,'onscreen')
         end
 
         % Button pushed function: MetaboliteNulledButton
@@ -226,8 +243,15 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             info = 'Please select the metabolite-nulled file to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
+            dir = app.MRSDataText.Value{1};
+            [path,~,~]=fileparts(dir);
+            SepFileList =  split(path, filesep);
+            npath = [];
+            for s = 1 : length(SepFileList)-1
+                npath = [npath SepFileList{s} filesep];
+            end
             
-            metnulfiles = uipickfiles('FilterSpec',[pwd], ...
+            metnulfiles = uipickfiles('FilterSpec',npath, ...
                                 'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
                                 'NumFiles',ndata,'Prompt',info);
             
@@ -237,15 +261,23 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             
             app.MetaboliteNulledDropDown.Items = metnulfiles;
             app.MetaboliteNulledDropDown.Value = metnulfiles{1};
+            movegui(app.InteractiveOspreyJobmCreatorUIFigure,'onscreen')
         end
 
         % Button pushed function: T1DataniftiniiButton
         function T1DataniftiniiButtonPushed(app, event)
-            info = 'Please select the T1 Data file to read';
+            info = 'Please select the T1 anatomical file to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
+            dir = app.MRSDataText.Value{1};
+            [path,~,~]=fileparts(dir);
+            SepFileList =  split(path, filesep);
+            npath = [];
+            for s = 1 : length(SepFileList)-2
+                npath = [npath SepFileList{s} filesep];
+            end
             
-            t1imfiles = uipickfiles('FilterSpec',[pwd], ...
+            t1imfiles = uipickfiles('FilterSpec',npath, ...
                                 'REFilter','\.nii|\.nii.gz', ...
                                 'NumFiles',ndata,'Prompt',info);
             
@@ -255,6 +287,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             
             app.T1DataniftiniiDropDown.Items = t1imfiles;
             app.T1DataniftiniiDropDown.Value = t1imfiles{1};
+            movegui(app.InteractiveOspreyJobmCreatorUIFigure,'onscreen')
         end
 
         % Button pushed function: OutputFolderButton

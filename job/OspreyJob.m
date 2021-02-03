@@ -93,6 +93,9 @@ if strcmp(jobFileFormat,'csv')
     if isfield(jobStruct, 'files_nii')
         files_nii = {jobStruct.files_nii};
     end
+    if isfield(jobStruct, 'files_sense')
+        files_sense = {jobStruct.sense};
+    end
     if isfield(jobStruct, 'outputFolder')
         outputFolder = jobStruct(1).outputFolder;
     else
@@ -107,7 +110,7 @@ if strcmp(jobFileFormat,'csv')
     if isfield(jobStruct,'MultiVoxel')
         MultiVoxel = jobStruct(1).MultiVoxel;
     else
-        fprintf('Multivoxel isset to single voxel spectroscopy  (default). Please indicate otherwise in the csv-file or the GUI \n');
+        fprintf('Multivoxel is set to single voxel spectroscopy  (default). Please indicate otherwise in the csv-file or the GUI \n');
         MultiVoxel = 'SVS';
     end
     if isfield(jobStruct,'editTarget')
@@ -269,6 +272,12 @@ if exist('MultiVoxel','var')
     switch MultiVoxel
         case 'PRIAM'
             MRSCont.flags.isPRIAM = 1;
+            MRSCont.SENSE = cell(length(priam_offset));
+            for kk = 1:length(priam_offset)
+                MRSCont.SENSE{kk}.priam_offset = priam_offset{kk};
+                MRSCont.SENSE{kk}.priam_direction = priam_direction{kk};
+            end
+
         case 'MRSI'
             MRSCont.flags.isMRSI = 1;
         otherwise
@@ -314,6 +323,9 @@ end
 if exist('files_nii','var')
     MRSCont.files_nii = files_nii;
 end
+if exist('files_sense','var')
+    MRSCont.files_sense = files_sense;
+end
 if exist('outputFolder','var')
     MRSCont.outputFolder = outputFolder;
 else
@@ -321,7 +333,7 @@ else
 end
 
 % Check that each array has an identical number of entries
-fieldNames = {'files', 'files_ref', 'files_w','files_mm', 'files_nii'};
+fieldNames = {'files', 'files_ref', 'files_w','files_mm', 'files_nii', 'files_sense'};
 ctr = 0;
 for kk = 1:length(fieldNames)
     if isfield(MRSCont, fieldNames{kk})
@@ -422,8 +434,11 @@ if ~GUI
                             if isfield(MRSCont,'files_w')
                                 MRSCont.files_w = MRSContNew.files_w;
                             end
-                            if isfield(MRSCont,'files_ref')
+                            if isfield(MRSCont,'files_nii')
                                 MRSCont.files_nii = MRSContNew.files_nii;
+                            end
+                            if isfield(MRSCont,'files_sense')
+                                MRSCont.files_sense = MRSContNew.files_sense;
                             end
                         end
                         MRSCont.flags.speedUp        = 1;
@@ -496,8 +511,11 @@ else
                             if isfield(MRSCont,'files_w')
                                 MRSCont.files_w = MRSContNew.files_w;
                             end
-                            if isfield(MRSCont,'files_ref')
+                            if isfield(MRSCont,'files_nii')
                                 MRSCont.files_nii = MRSContNew.files_nii;
+                            end
+                            if isfield(MRSCont,'files_sense')
+                                MRSCont.files_sense = MRSContNew.files_sense;
                             end
                         end
                         MRSCont.flags.speedUp        = 1;
