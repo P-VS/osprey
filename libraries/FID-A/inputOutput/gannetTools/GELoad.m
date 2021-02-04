@@ -362,7 +362,7 @@ fclose(fid);
 %              over phase cycles
 
 if (nechoes == 1) 
-    if rdbm_rev_num>26
+    if rdbm_rev_num>27
         newdat=reshape(raw_data,[2,numel(raw_data)/2]);
         totalframes = totalframes-1;
         
