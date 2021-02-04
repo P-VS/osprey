@@ -159,7 +159,8 @@ if strcmp(seqType, 'HERMES')
         target1 = 'GABA';
         target2 = 'GSH';
     end
-        target = [target1 target2];
+    
+    target = [target1 target2];
     switch target
         case {'GABAGSH','GABALac'}  
             % For HERMES/HERCULES data, align the GSH-OFF spectra first, i.e.
