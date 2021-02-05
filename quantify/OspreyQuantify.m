@@ -127,12 +127,13 @@ if ~exist(saveDestination,'dir')
     mkdir(saveDestination);
 end
 
+
 % Add combinations of metabolites to the basisset
 for ll = 1:length(getResults)
     if ~iscell(MRSCont.fit.results) %Is SVS
-        MRSCont.quantify.metabs.(getResults{ll}) = MRSCont.fit.resBasisSet.(getResults{ll}){1,1}.name;
+       MRSCont.quantify.metabs.(getResults{ll}) = MRSCont.fit.resBasisSet.(getResults{ll}){1,1}.name;
     else %Is DualVoxel
-        MRSCont.quantify.metabs.(getResults{ll}) = MRSCont.fit.resBasisSet{1,1}.(getResults{ll}){1,1}.name;
+       MRSCont.quantify.metabs.(getResults{ll}) = MRSCont.fit.resBasisSet{1,1}.(getResults{ll}){1,1}.name;
     end
 end
 
@@ -744,7 +745,6 @@ function [MRSCont] = osp_createTable(MRSCont, qtfyType, getResults)
                 names = MRSCont.quantify.metabs.(getResults{ll});
                 for rr = 1  : size(MRSCont.quantify.(getResults{ll}).(qtfyType){1},2)
                     conc = zeros(MRSCont.nDatasets,length(names));
-
                     for kk = 1:MRSCont.nDatasets
                         conc(kk,:) = MRSCont.quantify.(getResults{ll}).(qtfyType){kk}(:,rr);
                     end
@@ -754,7 +754,7 @@ function [MRSCont] = osp_createTable(MRSCont, qtfyType, getResults)
                             conc(MRSCont.exclude,:) = [];
                         end
                     end
-                    MRSCont.quantify.tables.(getResults{ll}).(qtfyType).(['Voxel_' num2str(rr)])   = array2table(conc,'VariableNames',names);
+                    MRSCont.quantify.tables.(getResults{ll}).(qtfyType).(['Voxel_' num2str(rr)])  = array2table(conc,'VariableNames',names);
                 end
             end
         else
@@ -773,7 +773,7 @@ function [MRSCont] = osp_createTable(MRSCont, qtfyType, getResults)
                             conc(MRSCont.exclude,:) = [];
                         end
                     end
-                    MRSCont.quantify.tables.(getResults{ll}).(qtfyType).(['Voxel_' num2str(rr)])  = array2table(conc,'VariableNames',names);
+                    MRSCont.quantify.tables.(getResults{ll}).(qtfyType).(['Voxel_' num2str(rr)]) = array2table(conc,'VariableNames',names);
                 end
             end            
         end
@@ -783,8 +783,7 @@ function [MRSCont] = osp_createTable(MRSCont, qtfyType, getResults)
         if ~strcmp(MRSCont.opts.fit.coMM3, 'none')
             names = {'GABA','GABAplus'};    
         end
-
-
+        
         for ll = 1:length(getResults)
             for rr = 1  : size(MRSCont.quantify.(getResults{ll}).(qtfyType){1},2)
                 conc = zeros(MRSCont.nDatasets,length(names));

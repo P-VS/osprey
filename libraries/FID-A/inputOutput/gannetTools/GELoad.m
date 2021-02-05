@@ -277,7 +277,8 @@ switch num2str(rdbm_rev_num)
         image_user22 = 112;
         tlhc         = 181;
         trhc         = 184;
-        brhc         = 187;    
+        brhc         = 187;
+        
 end
 
 % Read rdb header as short, int and float

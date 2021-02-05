@@ -222,12 +222,12 @@ fclose(fileID); %close log file
 %% Create table and csv file
 tissueTypes = {'fGM','fWM','fCSF'};
 %Loop over voxels (for DualVoxel)
+
 for rr = 1 : Voxels
     tissue = horzcat(MRSCont.seg.tissue.fGM(:,rr),MRSCont.seg.tissue.fWM(:,rr),MRSCont.seg.tissue.fCSF(:,rr));
     MRSCont.seg.(['tables_Voxel_' num2str(rr)]) = array2table(tissue,'VariableNames',tissueTypes);
     writetable(MRSCont.seg.(['tables_Voxel_' num2str(rr)]),[saveDestination  filesep 'TissueFractions_Voxel_' num2str(rr) '.csv']);
 end
-
 
 %% Clean up and save
 % Set exit flags and version
@@ -258,7 +258,6 @@ else
 end
 
 end
-
 
 
 

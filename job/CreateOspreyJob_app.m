@@ -189,7 +189,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             info = 'Please select the water reference file to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
-            dir = app.MRSDataText.Value{1};
+            dir = app.MRSdataDropDown.Value;
             [path,~,~]=fileparts(dir);
             
             SepFileList =  split(path, filesep);
@@ -198,9 +198,15 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
                 npath = [npath SepFileList{s} filesep];
             end
             
-            h2oreffiles = uipickfiles('FilterSpec',npath, ...
-                                'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
-                                'NumFiles',ndata,'Prompt',info);
+            try
+                h2oreffiles = uipickfiles('FilterSpec',npath, ...
+                                    'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            catch
+                h2oreffiles = uipickfiles('FilterSpec',path, ...
+                                    'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            end
             
             if ~iscell(h2oreffiles)
                 return
@@ -217,7 +223,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             [fname,pathname]=uigetfile('*.*',info);
             
             ndata = app.NumberofdatasetsEditField.Value;
-            dir = app.MRSDataText.Value{1};
+            dir = app.MRSdataDropDown.Value;
             [path,~,~]=fileparts(dir);
             SepFileList =  split(path, filesep);
             npath = [];
@@ -225,9 +231,15 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
                 npath = [npath SepFileList{s} filesep];
             end
             
-            h2ostefiles = uipickfiles('FilterSpec',npath, ...
-                                'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
-                                'NumFiles',ndata,'Prompt',info);
+            try
+                h2ostefiles = uipickfiles('FilterSpec',npath, ...
+                                    'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            catch
+                h2ostefiles = uipickfiles('FilterSpec',path, ...
+                                    'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            end
             
             if ~iscell(h2ostefiles)
                 return
@@ -243,7 +255,7 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             info = 'Please select the metabolite-nulled file to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
-            dir = app.MRSDataText.Value{1};
+            dir = app.MRSdataDropDown.Value;
             [path,~,~]=fileparts(dir);
             SepFileList =  split(path, filesep);
             npath = [];
@@ -251,9 +263,15 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
                 npath = [npath SepFileList{s} filesep];
             end
             
-            metnulfiles = uipickfiles('FilterSpec',npath, ...
-                                'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
-                                'NumFiles',ndata,'Prompt',info);
+            try
+                metnulfiles = uipickfiles('FilterSpec',npath, ...
+                                    'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            catch
+                metnulfiles = uipickfiles('FilterSpec',path, ...
+                                    'REFilter','\.sdat|\.raw|\.dat|\.rda|\.dcm|\.7', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            end
             
             if ~iscell(metnulfiles)
                 return
@@ -269,17 +287,23 @@ classdef CreateOspreyJob_app < matlab.apps.AppBase
             info = 'Please select the T1 anatomical file to read';
             
             ndata = app.NumberofdatasetsEditField.Value;
-            dir = app.MRSDataText.Value{1};
+            dir = app.MRSdataDropDown.Value;
             [path,~,~]=fileparts(dir);
             SepFileList =  split(path, filesep);
             npath = [];
-            for s = 1 : length(SepFileList)-2
+            for s = 1 : length(SepFileList)-1
                 npath = [npath SepFileList{s} filesep];
             end
             
-            t1imfiles = uipickfiles('FilterSpec',npath, ...
-                                'REFilter','\.nii|\.nii.gz', ...
-                                'NumFiles',ndata,'Prompt',info);
+            try
+                t1imfiles = uipickfiles('FilterSpec',npath, ...
+                                    'REFilter','\.nii|\.nii.gz', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            catch
+                t1imfiles = uipickfiles('FilterSpec',path, ...
+                                    'REFilter','\.nii|\.nii.gz', ...
+                                    'NumFiles',ndata,'Prompt',info);
+            end
             
             if ~iscell(t1imfiles)
                 return
