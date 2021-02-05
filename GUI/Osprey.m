@@ -15,7 +15,6 @@ function  Osprey(varargin)
 %
 %   HISTORY:
 %       2019-07-11: First version of the code.
-
 %% Check for available add-ons
 [ospFFolder,~,~] = fileparts(which('Osprey.m'));
 if ~isfile(fullfile(ospFFolder,'startpath.mat'))

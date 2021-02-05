@@ -108,7 +108,7 @@ elseif (MRSCont.flags.isHERMES) || (MRSCont.flags.isHERCULES)
                 fprintf(fileID,msg);
                 error(msg);
         end  
-     end  
+     end
 else
     msg = 'No flag set for sequence type!';
     fprintf(fileID,msg);

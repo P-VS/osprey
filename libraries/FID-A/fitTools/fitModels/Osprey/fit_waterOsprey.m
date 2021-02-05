@@ -24,6 +24,7 @@
 
 function [fitParams] = fit_waterOsprey(dataToFit, resBasisSet, fitOpts)
 
+
 %%% 1. EXTRACT OPTIONS AND PREPARE FIT %%%
 % Extract ppm fit range
 fitRangePPMWater = fitOpts.rangeWater;
