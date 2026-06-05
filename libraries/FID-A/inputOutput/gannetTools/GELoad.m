@@ -177,7 +177,7 @@ switch num2str(rdbm_rev_num)
         trhc         = 184;
         brhc         = 187;
         
-    case {'26.002','27','27.001','28.002','28.003','30'}
+    case {'26.002','27','27.001','28.002','28.003','30','30.1','31'}
         
         % int
         rdb_hdr_off_image   = 11;
@@ -225,6 +225,8 @@ fseek(fid, 0, 'bof');
 f_hdr_value = fread(fid, rdb_hdr_user19, 'real*4');
 fseek(fid, 0, 'bof');
 i_hdr_value = fread(fid, max(rdb_hdr_off_image, rdb_hdr_ps_mps_freq), 'integer*4');
+fseek(fid, 0, 'bof'); %%%added
+ui_hdr_value = fread(fid, max(rdb_hdr_off_image, rdb_hdr_ps_mps_freq), 'uint32'); %%%added
 fseek(fid, i_hdr_value(rdb_hdr_off_image), 'bof');
 o_hdr_value = fread(fid, brhc+2, 'real*4');
 
@@ -244,7 +246,7 @@ if rdbm_rev_num > 11.0
     pfile_header_size = i_hdr_value(rdb_hdr_off_data);
 end
 
-hdr.Larmor = i_hdr_value(rdb_hdr_ps_mps_freq)/1e7;
+hdr.Larmor = ui_hdr_value(rdb_hdr_ps_mps_freq)/1e7; %%%added
 hdr.sw = f_hdr_value(rdb_hdr_user0);
 
 nechoes = hdr_value(rdb_hdr_nechoes);
@@ -381,6 +383,3 @@ FullData = FullData .* repmat([1; 1i], [1 npoints totalframes nreceivers]);
 FullData = conj(squeeze(sum(FullData,1)));
 WaterData = WaterData .* repmat([1; 1i], [1 npoints waterframes nreceivers]);
 WaterData = conj(squeeze(sum(WaterData,1)));
-
-
-
